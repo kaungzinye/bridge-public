@@ -1,6 +1,6 @@
 module.exports = {
-    spotifyClientID: 'YOUR_SPOTIFY_CLIENT_ID',
-    spotifyClientSecret: 'YOUR_SPOTIFY_CLIENT_SECRET',
-    mongoURI: 'YOUR_MONGO_URI',
-    jwtSecret: 'YOUR_JWT_SECRET'
+    spotifyClientID: '55c69889eebd423588f08fb0ed5af35a',
+    spotifyClientSecret: '6c8324cbee3148ca83319aa51c926234',
+    mongoURI: ':mongodb://localhost:27017/bridge-database',
+    jwtSecret: 'suA0vqsGSF'
 };
