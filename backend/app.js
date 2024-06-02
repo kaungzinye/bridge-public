@@ -15,9 +15,6 @@ require('./models/Match');
 require('./models/Post');
 require('./models/Swipe');
 
-// Passport configuration
-require('./config/passport')(passport);
-
 // Middleware
 app.use(bodyParser.json());
 app.use(passport.initialize());
@@ -28,6 +25,8 @@ const promptRoutes = require('./routes/prompts');
 const matchRoutes = require('./routes/matches');
 const postRoutes = require('./routes/posts');
 const swipeRoutes = require('./routes/swipes');
+const userRoutes = require('./routes/users');
+
 
 // Use routes
 app.use('/auth', authRoutes);
@@ -35,6 +34,7 @@ app.use('/prompts', promptRoutes);
 app.use('/matches', matchRoutes);
 app.use('/posts', postRoutes);
 app.use('/swipes', swipeRoutes);
+app.use('/users', userRoutes);
 
 // Serve static assets in production
 if (process.env.NODE_ENV === 'production') {

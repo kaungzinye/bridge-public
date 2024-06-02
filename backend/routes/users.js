@@ -1,25 +1,62 @@
-// user.js (Example User Route)
 const express = require('express');
-const router = express.Router();
-const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
-const User = require('../models/User'); // Assuming you have a User model
+const jwt = require('jsonwebtoken');
+const mongoose = require('mongoose');
+const User = mongoose.model('User');
+const jwtAuth = require('../middleware/jwtAuth');
+const keys = require('../config/keys');
+const router = express.Router();
 
-// User Login Route
-router.post('/login', async (req, res) => {
-    const user = await User.findOne({ email: req.body.email });
-    if (!user) return res.status(400).send('Email or password is wrong');
+// Register a new user
+router.post('/register', async (req, res) => {
+    const { name, email, password } = req.body;
 
-    const validPass = await bcrypt.compare(req.body.password, user.password);
-    if (!validPass) return res.status(400).send('Invalid password');
+    try {
+        let user = await User.findOne({ email });
+        if (user) {
+            return res.status(400).json({ msg: 'User already exists' });
+        }
 
-    const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
-    res.header('Authorization', `Bearer ${token}`).send({ token });
+        user = new User({ name, email, password });
+        const salt = await bcrypt.genSalt(10);
+        user.password = await bcrypt.hash(password, salt);
+        await user.save();
+
+        const payload = { id: user.id };
+        const token = jwt.sign(payload, keys.jwtSecret, { expiresIn: '1h' });
+        res.json({ token });
+    } catch (err) {
+        res.status(500).send('Server error');
+    }
 });
 
-// Protected Route
-router.get('/protected', authenticateToken, (req, res) => {
-    res.send('This is a protected route');
+// Login a user
+router.post('/login', async (req, res) => {
+    const { email, password } = req.body;
+
+    try {
+        const user = await User.findOne({ email });
+        if (!user) return res.status(400).json({ msg: 'Invalid credentials' });
+
+        const isMatch = await bcrypt.compare(password, user.password);
+        if (!isMatch) return res.status(400).json({ msg: 'Invalid credentials' });
+
+        const payload = { id: user.id };
+        const token = jwt.sign(payload, keys.jwtSecret, { expiresIn: '1h' });
+        res.json({ token });
+    } catch (err) {
+        res.status(500).send('Server error');
+    }
+});
+
+// Get user data
+router.get('/me', jwtAuth, async (req, res) => {
+    try {
+        const user = await User.findById(req.user.id).select('-password');
+        res.json(user);
+    } catch (err) {
+        res.status(500).send('Server error');
+    }
 });
 
 module.exports = router;
