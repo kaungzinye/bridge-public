@@ -3,6 +3,7 @@ import { View, StyleSheet, ImageBackground, Dimensions, Image } from 'react-nati
 import { Button, TextInput, Text, useTheme } from 'react-native-paper';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../types';
+import { theme } from '../styles/tailwind.config';
 
 type Props = {
   navigation: NativeStackNavigationProp<RootStackParamList, 'Login'>;
@@ -23,7 +24,7 @@ const LoginScreen: React.FC<Props> = ({ navigation }) => {
 
   return (
     <ImageBackground
-      source={require('../../assets/texturedbackground.png')} // Adjust the path as necessary
+      source={require('../../assets/texturedbackground.png')} 
       style={styles.background}
     >
       <View style={styles.overlay}>
@@ -72,7 +73,7 @@ const LoginScreen: React.FC<Props> = ({ navigation }) => {
         <Button 
           onPress={() => navigation.navigate('Signup')} 
           style={styles.link}
-          labelStyle={[styles.linkText, { color: colors.primary }]}
+          labelStyle={[styles.linkText, { color: '#ECC06C' }]}
         >
           Sign Up
         </Button>
@@ -101,8 +102,13 @@ const styles = StyleSheet.create({
     color: '#ECC06C', 
   },
   input: {
-    width: '100%',
-    marginBottom: 20,
+    flexDirection: "row",
+    borderRadius: 20,
+    marginHorizontal: 40,
+    elevation: 10,
+    marginVertical: 20, 
+    alignItems: "center",
+    height: 40,
   },
   link: {
     marginTop: 10,
