@@ -2,11 +2,11 @@ import React, { useState } from 'react';
 import { View, StyleSheet, ImageBackground, Dimensions, Image } from 'react-native';
 import { Button, TextInput, Text, useTheme } from 'react-native-paper';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { RootStackParamList } from '../types';
-import { theme } from '../styles/tailwind.config';
+import { AuthStackNavigationProp } from '../types/types';
+import axios from 'axios';
 
 type Props = {
-  navigation: NativeStackNavigationProp<RootStackParamList, 'Login'>;
+  navigation: AuthStackNavigationProp;
 };
 
 const { width, height } = Dimensions.get('window');
@@ -15,11 +15,26 @@ const LoginScreen: React.FC<Props> = ({ navigation }) => {
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [error, setError] = useState<string>(''); // Use string for error message, initialized to an empty string
   const { colors } = useTheme();
 
-  const handleLogin = () => {
-    // Implement login logic
-    navigation.navigate('Main');
+  const handleLogin = async () => {
+    try {
+      const response = await axios.post('http://localhost:3000/api/auth/login', { email, password });
+      const { token } = response.data;
+      navigation.navigate('Main');
+    } catch (err) {
+      if (axios.isAxiosError(err)) {
+        // Handle Axios error
+        setError(err.response?.data?.error || 'An error occurred');
+      } else if (err instanceof Error) {
+        // Handle general error
+        setError(err.message);
+      } else {
+        // Handle unexpected error type
+        setError('An unexpected error occurred');
+      }
+    }
   };
 
   return (

@@ -1,44 +1,61 @@
 import React, { useState } from 'react';
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet, Dimensions } from 'react-native';
 import { Button, TextInput, Text, HelperText } from 'react-native-paper';
-import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { RootStackParamList } from '../types'; // Adjust the path as necessary
+import axios from 'axios';
+import { AuthStackNavigationProp } from '../types/types';
 
 type Props = {
-  navigation: NativeStackNavigationProp<RootStackParamList, 'Signup'>;
+  navigation: AuthStackNavigationProp;
 };
+
+const { width, height } = Dimensions.get('window');
 
 const SignupScreen: React.FC<Props> = ({ navigation }) => {
   const [email, setEmail] = useState('');
   const [confirmEmail, setConfirmEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
-  const [emailError, setEmailError] = useState('');
-  const [passwordError, setPasswordError] = useState('');
+  const [emailError, setEmailError] = useState<string>('');
+  const [passwordError, setPasswordError] = useState<string>('');
+  const [generalError, setGeneralError] = useState<string>('');
 
-  const validateEmail = (email: string) => /\S+@\S+\.\S+/.test(email);
-
-  const validatePassword = (password: string) => /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/.test(password);
-
-  const handleSignup = () => {
-    setEmailError('');
-    setPasswordError('');
-
+  const validateEmail = () => {
     if (email !== confirmEmail) {
-      setEmailError("Emails don't match");
-    } else if (!validateEmail(email)) {
-      setEmailError("Invalid email format");
+      setEmailError('Emails do not match');
+      return false;
+    } else {
+      setEmailError('');
+      return true;
     }
+  };
 
+  const validatePassword = () => {
     if (password !== confirmPassword) {
-      setPasswordError("Passwords don't match");
-    } else if (!validatePassword(password)) {
-      setPasswordError("Password must be at least 8 characters long, contain at least one number, one special character, and no spaces");
+      setPasswordError('Passwords do not match');
+      return false;
+    } else {
+      setPasswordError('');
+      return true;
     }
+  };
 
-    if (!emailError && !passwordError) {
-      // Handle signup logic here
-      navigation.navigate('SetUsername');
+  const handleRegister = async () => {
+    if (validateEmail() && validatePassword()) {
+      try {
+        await axios.post('http://localhost:3000/api/auth/register', { email, password });
+        navigation.navigate('Login');
+      } catch (err) {
+        if (axios.isAxiosError(err)) {
+          // Handle Axios error
+          setGeneralError(err.response?.data?.error || 'An error occurred');
+        } else if (err instanceof Error) {
+          // Handle general error
+          setGeneralError(err.message);
+        } else {
+          // Handle unexpected error type
+          setGeneralError('An unexpected error occurred');
+        }
+      }
     }
   };
 
@@ -83,7 +100,10 @@ const SignupScreen: React.FC<Props> = ({ navigation }) => {
         style={styles.input}
         error={!!passwordError}
       />
-      <Button mode="contained" onPress={handleSignup} style={styles.button}>
+      <HelperText type="error" visible={!!passwordError}>
+        {passwordError}
+      </HelperText>
+      <Button mode="contained" onPress={handleRegister} style={styles.button}>
         Sign Up
       </Button>
       <Button onPress={() => { /* Handle Spotify Signup */ }} style={styles.button}>
@@ -92,6 +112,7 @@ const SignupScreen: React.FC<Props> = ({ navigation }) => {
       <Button onPress={() => navigation.goBack()} style={styles.link}>
         Back
       </Button>
+      {generalError ? <HelperText type="error" visible>{generalError}</HelperText> : null}
     </View>
   );
 };
@@ -120,4 +141,3 @@ const styles = StyleSheet.create({
 });
 
 export default SignupScreen;
-

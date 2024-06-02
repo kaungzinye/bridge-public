@@ -1,20 +1,41 @@
 import React, { useState } from 'react';
-import { View, StyleSheet } from 'react-native';
-import { Button, TextInput, Text } from 'react-native-paper';
+import { View, StyleSheet, ImageBackground, Dimensions, Image } from 'react-native';
+import { Button, TextInput, Text, useTheme } from 'react-native-paper';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { RootStackParamList } from '../types'; // Adjust the path as necessary
+import axios from 'axios';
+import { AuthStackNavigationProp } from '../types/types';
 
 type Props = {
-  navigation: NativeStackNavigationProp<RootStackParamList, 'SetUsername'>;
+  navigation: AuthStackNavigationProp;
 };
+
+const { width, height } = Dimensions.get('window');
 
 const SetUsernameScreen: React.FC<Props> = ({ navigation }) => {
   const [username, setUsername] = useState('');
+  const [error, setError] = useState<String>('');
   const [profilePicture, setProfilePicture] = useState(''); // Add logic for setting profile picture
 
   const handleNext = () => {
     // Implement setting profile and username logic
     navigation.navigate('Main');
+  };
+  const handleSetUsername = async () => {
+    try {
+      const response = await axios.post('http://localhost:3000/api/auth/set-username', { username });
+      // Navigate to the main app
+    } catch (err) {
+      if (axios.isAxiosError(err)) {
+        // Handle Axios error
+        setError(err.response?.data?.error || 'An error occurred');
+      } else if (err instanceof Error) {
+        // Handle general error
+        setError(err.message);
+      } else {
+        // Handle unexpected error type
+        setError('An unexpected error occurred');
+      }
+    }
   };
 
   return (
@@ -55,4 +76,3 @@ const styles = StyleSheet.create({
 });
 
 export default SetUsernameScreen;
-
