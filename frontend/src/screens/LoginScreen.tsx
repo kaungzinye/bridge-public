@@ -23,7 +23,9 @@ const LoginScreen: React.FC<Props> = ({ navigation }) => {
 
   const handleLogin = async () => {
     try {
-      const response = await axios.post('http://localhost:3000/api/auth/login', { email, password });
+      console.log(email)
+      console.log(password)
+      const response = await axios.post('http://localhost:3000/users/login', { email, password });
       const { token } = response.data;
       navigation.navigate('Main');
     } catch (err) {
@@ -65,6 +67,7 @@ const LoginScreen: React.FC<Props> = ({ navigation }) => {
           placeholderTextColor={darkTheme.onSurfaceVariant}
           textColor={darkTheme.primaryFixed}
           activeOutlineColor={darkTheme.secondaryFixedDim}
+          autoCapitalize='none'
          />
       </View>
 
@@ -80,6 +83,7 @@ const LoginScreen: React.FC<Props> = ({ navigation }) => {
           placeholderTextColor={darkTheme.onSurfaceVariant}
           textColor={darkTheme.primaryFixed}
           activeOutlineColor={darkTheme.secondaryFixedDim}
+          autoCapitalize='none'
          />
       </View>
 
@@ -96,7 +100,7 @@ const LoginScreen: React.FC<Props> = ({ navigation }) => {
       <View style={styles.buttonContainer}>
       <Button 
         mode="contained" 
-        onPress={() => navigation.navigate('Login')} 
+        onPress={() => handleLogin()} 
         style={styles.button}
         labelStyle={styles.buttonText}
        >
@@ -193,6 +197,7 @@ const styles = StyleSheet.create({
     color: darkTheme.onSurface,
     backgroundColor: 'transparent',
     flex: 1,
+    textTransform: "none",
   },
 });
 
