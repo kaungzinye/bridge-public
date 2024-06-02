@@ -1,2 +1,2 @@
 # bridge-private
-brdige-private
+bridge-private

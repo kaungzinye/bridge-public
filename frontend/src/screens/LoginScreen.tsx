@@ -2,10 +2,11 @@ import React, { useState } from 'react';
 import { View, StyleSheet, ImageBackground, Dimensions, Image } from 'react-native';
 import { Button, TextInput, Text, useTheme } from 'react-native-paper';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { RootStackParamList } from '../types';
+import { AuthStackNavigationProp } from '../types/types';
+import axios from 'axios';
 
 type Props = {
-  navigation: NativeStackNavigationProp<RootStackParamList, 'Login'>;
+  navigation: AuthStackNavigationProp;
 };
 
 const { width, height } = Dimensions.get('window');
@@ -14,16 +15,31 @@ const LoginScreen: React.FC<Props> = ({ navigation }) => {
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [error, setError] = useState<string>(''); // Use string for error message, initialized to an empty string
   const { colors } = useTheme();
 
-  const handleLogin = () => {
-    // Implement login logic
-    navigation.navigate('Main');
+  const handleLogin = async () => {
+    try {
+      const response = await axios.post('http://localhost:3000/api/auth/login', { email, password });
+      const { token } = response.data;
+      navigation.navigate('Main');
+    } catch (err) {
+      if (axios.isAxiosError(err)) {
+        // Handle Axios error
+        setError(err.response?.data?.error || 'An error occurred');
+      } else if (err instanceof Error) {
+        // Handle general error
+        setError(err.message);
+      } else {
+        // Handle unexpected error type
+        setError('An unexpected error occurred');
+      }
+    }
   };
 
   return (
     <ImageBackground
-      source={require('../../assets/texturedbackground.png')} // Adjust the path as necessary
+      source={require('../../assets/texturedbackground.png')} 
       style={styles.background}
     >
       <View style={styles.overlay}>
@@ -72,7 +88,7 @@ const LoginScreen: React.FC<Props> = ({ navigation }) => {
         <Button 
           onPress={() => navigation.navigate('Signup')} 
           style={styles.link}
-          labelStyle={[styles.linkText, { color: colors.primary }]}
+          labelStyle={[styles.linkText, { color: '#ECC06C' }]}
         >
           Sign Up
         </Button>
@@ -101,8 +117,13 @@ const styles = StyleSheet.create({
     color: '#ECC06C', 
   },
   input: {
-    width: '100%',
-    marginBottom: 20,
+    flexDirection: "row",
+    borderRadius: 20,
+    marginHorizontal: 40,
+    elevation: 10,
+    marginVertical: 20, 
+    alignItems: "center",
+    height: 40,
   },
   link: {
     marginTop: 10,
