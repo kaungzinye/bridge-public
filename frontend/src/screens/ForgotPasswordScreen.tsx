@@ -3,17 +3,36 @@ import { View, StyleSheet } from 'react-native';
 import { Button, TextInput, Text } from 'react-native-paper';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../types'; // Adjust the path as necessary
+import axios from 'axios';
+import { AuthStackNavigationProp } from '../types/types';
 
 type Props = {
-  navigation: NativeStackNavigationProp<RootStackParamList, 'ForgotPassword'>;
+  navigation: AuthStackNavigationProp;
 };
 
 const ForgotPasswordScreen: React.FC<Props> = ({ navigation }) => {
   const [email, setEmail] = useState('');
+  const [error, setError] = useState<String>('');
+  const [message, setMessage] = useState('');
 
-  const handleForgotPassword = () => {
-    // Implement password reset logic
-  };
+  const handleForgotPassword = async () => {
+    try {
+      const response = await axios.post('http://localhost:3000/api/auth/forgot-password', { email });
+      setMessage(response.data.message);
+    }
+  catch (err) {
+    if (axios.isAxiosError(err)) {
+      // Handle Axios error
+      setError(err.response?.data?.error || 'An error occurred');
+    } else if (err instanceof Error) {
+      // Handle general error
+      setError(err.message);
+    } else {  
+      // Handle unexpected error type
+      setError('An unexpected error occurred');
+    }
+  }
+};
 
   return (
     <View style={styles.container}>
@@ -61,4 +80,3 @@ const styles = StyleSheet.create({
 });
 
 export default ForgotPasswordScreen;
-

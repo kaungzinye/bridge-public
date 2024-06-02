@@ -1,18 +1,18 @@
 import React from 'react';
 import { View, StyleSheet, ImageBackground, Image, Dimensions } from 'react-native';
 import { Button, Text, useTheme } from 'react-native-paper';
+import { AuthStackNavigationProp } from '../types/types';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { RootStackParamList } from '../types';
 import { darkTheme } from '../styles/theme';
 
 type Props = {
-  navigation: NativeStackNavigationProp<RootStackParamList, 'Welcome'>;
+  navigation: AuthStackNavigationProp;
 };
+
 
 const { width, height } = Dimensions.get('window');
 
 const WelcomeScreen: React.FC<Props> = ({ navigation }) => {
-  const { colors } = useTheme();
 
   return (
     <ImageBackground
