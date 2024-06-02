@@ -39,12 +39,12 @@ The Bridge Application is a platform designed to connect users through shared mu
     node server.js
     The backend server will run on http://localhost:3000.
     
-5. Frontend Setup
-    Navigate to the frontend directory:
+## Frontend Setup
+1. Navigate to the frontend directory:
     cd ../bridge-frontend
     Install the dependencies:
     npm install
 
-6. Start the React Native application:
+2. Start the React Native application:
     npm start
     Follow the instructions provided by the React Native CLI to run the application on your desired platform (iOS, Android, or web).
