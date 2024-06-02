@@ -1,0 +1,32 @@
+/*
+<View /*style={styles.container}*/>
+
+      // Background Container
+      <View> 
+        <ImageBackground
+        source={require('../../assets/texturedbackground.png')} 
+        style={styles.background}
+        />
+      </View>
+
+      // Logo Container
+      <View>
+        <Image
+          source={require('../../assets/bridgelogo.png')} 
+          style={styles.logo}
+          resizeMode="contain"
+        />
+      </View>
+
+      // Email Input Container
+
+      // Password Input Container
+
+      // Login Button Container
+
+      // Forgot Password Container
+
+      // Signup Container
+
+</View>
+*/
