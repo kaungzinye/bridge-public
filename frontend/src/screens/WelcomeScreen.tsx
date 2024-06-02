@@ -3,6 +3,7 @@ import { View, StyleSheet, ImageBackground, Image, Dimensions } from 'react-nati
 import { Button, Text, useTheme } from 'react-native-paper';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../types';
+import {darkTheme, lightTheme} from "../styles/theme"
 
 type Props = {
   navigation: NativeStackNavigationProp<RootStackParamList, 'Welcome'>;
@@ -44,10 +45,11 @@ const styles = StyleSheet.create({
     height: '100%',
     justifyContent: 'center',
     alignItems: 'center',
+    backgroundColor: darkTheme.background, // Use theme color
   },
   button: {
-    backgroundColor: 'transparent',
-    borderColor: '#7F7667', 
+    backgroundColor: darkTheme.surfaceContainerLow, // Use theme color
+    borderColor: darkTheme.onPrimaryContainer, // Use theme color
     borderWidth: 1.5,
     borderRadius: 100,
     paddingHorizontal: width * 0.01, 
@@ -55,7 +57,7 @@ const styles = StyleSheet.create({
     marginTop: -50,
   },
   buttonText: {
-    color: '#ECC06C', 
+    color: darkTheme.onPrimaryContainer, // Use theme color
   },
   logo: {
     width: width * 0.9, 
@@ -69,7 +71,6 @@ const styles = StyleSheet.create({
 });
 
 export default WelcomeScreen;
-
 
 
 
