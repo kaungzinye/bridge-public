@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { View, StyleSheet } from 'react-native';
-import { Button, TextInput, Text, HelperText } from 'react-native-paper';
+import { Button, TextInput, Text, HelperText, Dialog } from 'react-native-paper';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../types'; // Adjust the path as necessary
 
@@ -39,39 +39,55 @@ const SignupScreen: React.FC<Props> = ({ navigation }) => {
     if (!emailError && !passwordError) {
       // Handle signup logic here
       navigation.navigate('SetUsername');
-    }
+    } 
   };
 
   return (
     <View style={styles.container}>
-      <Text style={styles.text}>Sign Up</Text>
-      <TextInput
-        label="Email"
-        value={email}
-        onChangeText={setEmail}
-        keyboardType="email-address"
-        style={styles.input}
-        error={!!emailError}
-      />
-      <HelperText type="error" visible={!!emailError}>
-        {emailError}
-      </HelperText>
-      <TextInput
-        label="Confirm Email"
-        value={confirmEmail}
-        onChangeText={setConfirmEmail}
-        keyboardType="email-address"
-        style={styles.input}
-        error={!!emailError}
-      />
-      <TextInput
-        label="Password"
-        value={password}
-        onChangeText={setPassword}
-        secureTextEntry
-        style={styles.input}
-        error={!!passwordError}
-      />
+
+      <View>
+        <Text style={styles.text}>Sign Up</Text>
+      </View>
+      
+      <View>
+        <TextInput
+          label="Email"
+          value={email}
+          onChangeText={setEmail}
+          keyboardType="email-address"
+          style={styles.input}
+          error={!!emailError}
+        />
+      </View>
+      
+      <View>
+        <HelperText type="error" visible={!!emailError}>
+          {emailError}
+        </HelperText>
+      </View>
+      
+      <View>
+        <TextInput
+          label="Confirm Email"
+          value={confirmEmail}
+          onChangeText={setConfirmEmail}
+          keyboardType="email-address"
+          style={styles.input}
+          error={!!emailError}
+        />
+      </View>
+      
+      <View>
+        <TextInput
+          label="Password"
+          value={password}
+          onChangeText={setPassword}
+          secureTextEntry
+          style={styles.input}
+          error={!!passwordError}
+        />
+      </View>
+      
       <HelperText type="error" visible={!!passwordError}>
         {passwordError}
       </HelperText>
