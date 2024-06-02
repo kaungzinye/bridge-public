@@ -3,7 +3,7 @@ import { View, StyleSheet, ImageBackground, Dimensions, Image } from 'react-nati
 import { Button, TextInput, Text, useTheme } from 'react-native-paper';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../types';
-import { theme } from '../styles/tailwind.config';
+import {darkTheme, lightTheme} from "../styles/theme"
 
 type Props = {
   navigation: NativeStackNavigationProp<RootStackParamList, 'Login'>;
@@ -15,7 +15,7 @@ const LoginScreen: React.FC<Props> = ({ navigation }) => {
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const { colors } = useTheme();
+  const theme = useTheme();
 
   const handleLogin = () => {
     // Implement login logic
@@ -24,60 +24,79 @@ const LoginScreen: React.FC<Props> = ({ navigation }) => {
 
   return (
     <ImageBackground
-      source={require('../../assets/texturedbackground.png')} 
-      style={styles.background}
+        source={require('../../assets/texturedbackground.png')} 
+        style={styles.background}
     >
-      <View style={styles.overlay}>
+
+      <View style={styles.logoContainer}>
         <Image
           source={require('../../assets/bridgelogo.png')} 
           style={styles.logo}
           resizeMode="contain"
         />
+      </View>
 
-        <TextInput
-          style={styles.input}
+      <View style={styles.inputContainer}>
+        <TextInput 
+          style={styles.textInput}
           placeholder="Email"
           value={email}
           onChangeText={setEmail}
           mode="outlined"
-          outlineColor={colors.primary}
-          placeholderTextColor={colors.onSurfaceVariant}
-          activeOutlineColor={colors.primary}
-        />
-        <TextInput
-          style={styles.input}
+          outlineColor={darkTheme.outline}
+          placeholderTextColor={darkTheme.onSurfaceVariant}
+          textColor={darkTheme.primaryFixed}
+          activeOutlineColor={darkTheme.secondaryFixedDim}
+         />
+      </View>
+
+      <View style={styles.inputContainer}>
+        <TextInput 
+          style={styles.textInput}
           placeholder="Password"
           value={password}
           onChangeText={setPassword}
           secureTextEntry
           mode="outlined"
-          outlineColor={colors.primary}
-          placeholderTextColor={colors.onSurfaceVariant}
-          activeOutlineColor={colors.primary}
-        />
-        <Button 
-          mode="contained" 
-          onPress={handleLogin} 
-          style={[styles.button, { borderColor: colors.outline }]}
-          labelStyle={[styles.buttonText, { color: colors.primary }]}
-        >
-          Login
-        </Button>
+          outlineColor={darkTheme.outline}
+          placeholderTextColor={darkTheme.onSurfaceVariant}
+          textColor={darkTheme.primaryFixed}
+          activeOutlineColor={darkTheme.secondaryFixedDim}
+         />
+      </View>
+
+      <View style={styles.forgotPasswordContainer}>
         <Button 
           onPress={() => navigation.navigate('ForgotPassword')} 
-          style={styles.link}
-          labelStyle={[styles.linkText, { color: colors.primary }]}
+          style={styles.forgotPasswordButton}
+          labelStyle={styles.forgotPasswordText}
         >
           Forgot Password?
         </Button>
-        <Button 
-          onPress={() => navigation.navigate('Signup')} 
-          style={styles.link}
-          labelStyle={[styles.linkText, { color: '#ECC06C' }]}
-        >
-          Sign Up
+      </View>
+      
+      <View style={styles.buttonContainer}>
+      <Button 
+        mode="contained" 
+        onPress={() => navigation.navigate('Login')} 
+        style={styles.button}
+        labelStyle={styles.buttonText}
+       >
+          Login 
         </Button>
       </View>
+
+
+      <View style={styles.signupContainer}>
+        <Button 
+          onPress={() => navigation.navigate('Signup')} 
+          style={styles.forgotPasswordButton}
+          labelStyle={styles.signupText}
+        >
+          Don't have an account yet?
+        </Button>
+      </View>
+
     </ImageBackground>
   );
 };
@@ -92,43 +111,70 @@ const styles = StyleSheet.create({
   },
   button: {
     backgroundColor: 'transparent',
-    borderColor: '#7F7667', 
+    borderColor: darkTheme.inversePrimary, 
     borderWidth: 1.5,
     borderRadius: 100,
     paddingHorizontal: width * 0.01, 
     paddingVertical: height * 0.006,
   },
   buttonText: {
-    color: '#ECC06C', 
+    fontSize: 16,
+    color: darkTheme.secondaryFixedDim,
   },
-  input: {
+  buttonContainer: {
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  forgotPasswordButton: {
+    backgroundColor: 'transparent',
+  },
+  forgotPasswordText: {
+    color: darkTheme.secondary,
+    textAlign: "right",
+    width: "90%",
+    fontSize: 12,
+  },
+  forgotPasswordContainer: {
+    marginTop: -10,
+  },
+  inputContainer: {
+    color: darkTheme.onSurface,
+    backgroundColor: 'transparent',
     flexDirection: "row",
-    borderRadius: 20,
+    borderRadius: 40,
     marginHorizontal: 40,
     elevation: 10,
-    marginVertical: 20, 
+    marginVertical: 15,
     alignItems: "center",
-    height: 40,
-  },
-  link: {
-    marginTop: 10,
-  },
-  linkText: {
-    color: '#ECC06C',
+    height: 50,
   },
   logo: {
     width: width * 0.9, 
     height: height * 0.5, 
   },
-  overlay: {
-    flex: 1,
+  logoContainer: {
     justifyContent: 'center',
     alignItems: 'center',
-    paddingHorizontal: width * 0.1,
   },
-  title: {
-    fontSize: 36,
-    marginBottom: 40,
+  signupContainer: {
+    flexDirection: "row",
+    borderRadius: 200,
+    marginHorizontal: 40,
+    elevation: 10,
+    marginVertical: 10, 
+    alignItems: "center",
+    height: 40,
+  },
+  signupText: {
+    color: darkTheme.secondary,
+    width: "90%",
+    fontSize: 13,
+    textAlign: "center",
+  },
+  textInput: {
+    color: darkTheme.onSurface,
+    backgroundColor: 'transparent',
+    flex: 1,
   },
 });
 
