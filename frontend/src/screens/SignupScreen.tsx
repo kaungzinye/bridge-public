@@ -2,11 +2,13 @@ import React, { useState } from 'react';
 import { View, StyleSheet, ImageBackground, Dimensions, Image } from 'react-native';
 import { Button, TextInput, Text, HelperText, Dialog } from 'react-native-paper';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { RootStackParamList } from '../types'; 
 import {darkTheme, lightTheme} from "../styles/theme"
+import { Button, TextInput, Text, HelperText 
+import axios from 'axios';
+import { AuthStackNavigationProp } from '../types/types';
 
 type Props = {
-  navigation: NativeStackNavigationProp<RootStackParamList, 'Signup'>;
+  navigation: AuthStackNavigationProp;
 };
 
 const { width, height } = Dimensions.get('window');
@@ -16,29 +18,29 @@ const SignupScreen: React.FC<Props> = ({ navigation }) => {
   const [confirmEmail, setConfirmEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
-  const [emailError, setEmailError] = useState('');
-  const [passwordError, setPasswordError] = useState('');
+  const [emailError, setEmailError] = useState<string>('');
+  const [passwordError, setPasswordError] = useState<string>('');
+  const [generalError, setGeneralError] = useState<string>('');
 
-  const validateEmail = (email: string) => /\S+@\S+\.\S+/.test(email);
-
-  const validatePassword = (password: string) => /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/.test(password);
-
-  const handleSignup = () => {
-    setEmailError('');
-    setPasswordError('');
-
+  const validateEmail = () => {
     if (email !== confirmEmail) {
-      setEmailError("Emails don't match");
-    } else if (!validateEmail(email)) {
-      setEmailError("Invalid email format");
+      setEmailError('Emails do not match');
+      return false;
+    } else {
+      setEmailError('');
+      return true;
     }
+  };
 
+  const validatePassword = () => {
     if (password !== confirmPassword) {
-      setPasswordError("Passwords don't match");
-    } else if (!validatePassword(password)) {
-      setPasswordError("Password must be at least 8 characters long, contain at least one number, one special character, and no spaces");
+      setPasswordError('Passwords do not match');
+      return false;
+    } else {
+      setPasswordError('');
+      return true;
     }
-
+  };
     if (!emailError && !passwordError) {
       // Handle signup logic here
       navigation.navigate('SetUsername');
@@ -241,4 +243,3 @@ const styles = StyleSheet.create({
 });
 
 export default SignupScreen;
-

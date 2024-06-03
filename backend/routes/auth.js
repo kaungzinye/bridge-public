@@ -1,15 +1,20 @@
 const express = require('express');
 const passport = require('passport');
-const jwt = require('jsonwebtoken');
-const keys = require('../config/keys');
-
 const router = express.Router();
 
-router.get('/spotify', passport.authenticate('spotify', { scope: ['user-read-email', 'user-read-private'] }));
+// Spotify authentication route
+router.get('/spotify', passport.authenticate('spotify', {
+    scope: ['user-read-email', 'user-read-private', 'user-library-read']
+}));
 
-router.get('/spotify/callback', passport.authenticate('spotify', { failureRedirect: '/' }), (req, res) => {
-    const token = jwt.sign({ id: req.user.id }, keys.jwtSecret, { expiresIn: '1h' });
-    res.redirect(`/#/auth?token=${token}`);
+// Spotify callback route
+router.get('/spotify/callback', passport.authenticate('spotify', { failureRedirect: '/auth/failure' }), (req, res) => {
+    res.redirect('/dashboard');
+});
+
+// Authentication failure route
+router.get('/auth/failure', (req, res) => {
+    res.send('Authentication failed. Please try again.');
 });
 
 module.exports = router;

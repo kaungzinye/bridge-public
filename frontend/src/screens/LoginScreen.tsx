@@ -2,11 +2,13 @@ import React, { useState } from 'react';
 import { View, StyleSheet, ImageBackground, Dimensions, Image } from 'react-native';
 import { Button, TextInput, Text, useTheme } from 'react-native-paper';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { AuthStackNavigationProp } from '../types/types';
+import axios from 'axios';
 import { RootStackParamList } from '../types';
 import {darkTheme, lightTheme} from "../styles/theme"
 
 type Props = {
-  navigation: NativeStackNavigationProp<RootStackParamList, 'Login'>;
+  navigation: AuthStackNavigationProp;
 };
 
 const { width, height } = Dimensions.get('window');
@@ -15,10 +17,28 @@ const LoginScreen: React.FC<Props> = ({ navigation }) => {
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [error, setError] = useState<string>(''); // Use string for error message, initialized to an empty string
+  const theme = useTheme();
 
-  const handleLogin = () => {
-    // Implement login logic
-    navigation.navigate('Main');
+  const handleLogin = async () => {
+    try {
+      console.log(email)
+      console.log(password)
+      const response = await axios.post('http://localhost:3000/users/login', { email, password });
+      const { token } = response.data;
+      navigation.navigate('Main');
+    } catch (err) {
+      if (axios.isAxiosError(err)) {
+        // Handle Axios error
+        setError(err.response?.data?.error || 'An error occurred');
+      } else if (err instanceof Error) {
+        // Handle general error
+        setError(err.message);
+      } else {
+        // Handle unexpected error type
+        setError('An unexpected error occurred');
+      }
+    }
   };
 
   return (
@@ -46,6 +66,7 @@ const LoginScreen: React.FC<Props> = ({ navigation }) => {
           placeholderTextColor={darkTheme.onSurfaceVariant}
           textColor={darkTheme.primaryFixed}
           activeOutlineColor={darkTheme.secondaryFixedDim}
+          autoCapitalize='none'
          />
       </View>
 
@@ -61,6 +82,7 @@ const LoginScreen: React.FC<Props> = ({ navigation }) => {
           placeholderTextColor={darkTheme.onSurfaceVariant}
           textColor={darkTheme.primaryFixed}
           activeOutlineColor={darkTheme.secondaryFixedDim}
+          autoCapitalize='none'
          />
       </View>
 
@@ -77,7 +99,7 @@ const LoginScreen: React.FC<Props> = ({ navigation }) => {
       <View style={styles.buttonContainer}>
       <Button 
         mode="contained" 
-        onPress={() => navigation.navigate('Login')} 
+        onPress={() => handleLogin()} 
         style={styles.button}
         labelStyle={styles.buttonText}
        >
@@ -174,6 +196,7 @@ const styles = StyleSheet.create({
     color: darkTheme.onSurface,
     backgroundColor: 'transparent',
     flex: 1,
+    textTransform: "none",
   },
 });
 
