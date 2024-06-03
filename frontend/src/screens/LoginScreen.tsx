@@ -15,7 +15,6 @@ const LoginScreen: React.FC<Props> = ({ navigation }) => {
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const theme = useTheme();
 
   const handleLogin = () => {
     // Implement login logic

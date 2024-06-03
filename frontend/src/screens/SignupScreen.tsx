@@ -1,12 +1,15 @@
 import React, { useState } from 'react';
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet, ImageBackground, Dimensions, Image } from 'react-native';
 import { Button, TextInput, Text, HelperText, Dialog } from 'react-native-paper';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { RootStackParamList } from '../types'; // Adjust the path as necessary
+import { RootStackParamList } from '../types'; 
+import {darkTheme, lightTheme} from "../styles/theme"
 
 type Props = {
   navigation: NativeStackNavigationProp<RootStackParamList, 'Signup'>;
 };
+
+const { width, height } = Dimensions.get('window');
 
 const SignupScreen: React.FC<Props> = ({ navigation }) => {
   const [email, setEmail] = useState('');
@@ -43,13 +46,19 @@ const SignupScreen: React.FC<Props> = ({ navigation }) => {
   };
 
   return (
-    <View style={styles.container}>
+    <ImageBackground
+    source={require('../../assets/texturedbackground.png')} 
+    style={styles.background}>
 
-      <View>
-        <Text style={styles.text}>Sign Up</Text>
+      <View style={styles.logoContainer}>
+        <Image
+          source={require('../../assets/bridgelogo.png')} 
+          style={styles.logo}
+          resizeMode="contain"
+        />
       </View>
       
-      <View>
+      <View style={styles.emailInputContainer}>
         <TextInput
           label="Email"
           value={email}
@@ -57,6 +66,11 @@ const SignupScreen: React.FC<Props> = ({ navigation }) => {
           keyboardType="email-address"
           style={styles.input}
           error={!!emailError}
+          mode="outlined"
+          outlineColor={darkTheme.outline}
+          placeholderTextColor={darkTheme.onSurfaceVariant}
+          textColor={darkTheme.primaryFixed}
+          activeOutlineColor={darkTheme.secondaryFixedDim}
         />
       </View>
       
@@ -66,7 +80,7 @@ const SignupScreen: React.FC<Props> = ({ navigation }) => {
         </HelperText>
       </View>
       
-      <View>
+      <View style={styles.confirmEmailInputContainer}>
         <TextInput
           label="Confirm Email"
           value={confirmEmail}
@@ -74,10 +88,15 @@ const SignupScreen: React.FC<Props> = ({ navigation }) => {
           keyboardType="email-address"
           style={styles.input}
           error={!!emailError}
+          mode="outlined"
+          outlineColor={darkTheme.outline}
+          placeholderTextColor={darkTheme.onSurfaceVariant}
+          textColor={darkTheme.primaryFixed}
+          activeOutlineColor={darkTheme.secondaryFixedDim}
         />
       </View>
       
-      <View>
+      <View style={styles.passwordInputContainer}>
         <TextInput
           label="Password"
           value={password}
@@ -85,52 +104,138 @@ const SignupScreen: React.FC<Props> = ({ navigation }) => {
           secureTextEntry
           style={styles.input}
           error={!!passwordError}
+          mode="outlined"
+          outlineColor={darkTheme.outline}
+          placeholderTextColor={darkTheme.onSurfaceVariant}
+          textColor={darkTheme.primaryFixed}
+          activeOutlineColor={darkTheme.secondaryFixedDim}
         />
       </View>
       
-      <HelperText type="error" visible={!!passwordError}>
-        {passwordError}
-      </HelperText>
-      <TextInput
-        label="Confirm Password"
-        value={confirmPassword}
-        onChangeText={setConfirmPassword}
-        secureTextEntry
-        style={styles.input}
-        error={!!passwordError}
-      />
-      <Button mode="contained" onPress={handleSignup} style={styles.button}>
-        Sign Up
-      </Button>
-      <Button onPress={() => { /* Handle Spotify Signup */ }} style={styles.button}>
-        Sign Up with Spotify
-      </Button>
-      <Button onPress={() => navigation.goBack()} style={styles.link}>
-        Back
-      </Button>
-    </View>
+      <View>
+        <HelperText type="error" visible={!!passwordError}>
+          {passwordError}
+        </HelperText>
+      </View>
+      
+      <View style={styles.confirmPasswordInputContainer}>
+        <TextInput
+          label="Confirm Password"
+          value={confirmPassword}
+          onChangeText={setConfirmPassword}
+          secureTextEntry
+          style={styles.input}
+          error={!!passwordError}
+          mode="outlined"
+          outlineColor={darkTheme.outline}
+          placeholderTextColor={darkTheme.onSurfaceVariant}
+          textColor={darkTheme.primaryFixed}
+          activeOutlineColor={darkTheme.secondaryFixedDim}
+        />
+      </View>
+
+      <View style={styles.signupButtonContainer}>
+        <Button mode="contained" onPress={handleSignup} style={styles.signupButton}>
+          Sign Up
+        </Button>
+      </View>
+      
+      <View style={styles.signupButtonContainer}>
+        <Button onPress={() => { /* Handle Spotify Signup */ }} style={styles.signupWithSpotifyButton}>
+          Sign Up with Spotify
+        </Button>
+      </View>
+      
+      <View style={styles.backButtonContainer}>
+        <Button onPress={() => navigation.goBack()} style={styles.back}>
+          Back
+        </Button>
+      </View>
+      
+    </ImageBackground>
   );
 };
 
 const styles = StyleSheet.create({
+  backButtonContainer: {},
+  background: {
+    flex: 1,
+    width: '100%',
+    height: '100%',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  confirmEmailInputContainer: {
+    color: darkTheme.onSurface,
+    backgroundColor: 'transparent',
+    flexDirection: "row",
+    borderRadius: 40,
+    marginHorizontal: 40,
+    elevation: 10,
+    marginVertical: 15,
+    alignItems: "center",
+    height: 50,
+  },
+  confirmPasswordInputContainer: {
+    color: darkTheme.onSurface,
+    backgroundColor: 'transparent',
+    flexDirection: "row",
+    borderRadius: 40,
+    marginHorizontal: 40,
+    elevation: 10,
+    marginVertical: 15,
+    alignItems: "center",
+    height: 50,
+  },
   container: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#fff',
   },
-  text: {
-    fontSize: 24,
-    marginBottom: 20,
+  emailInputContainer: {
+    color: darkTheme.onSurface,
+    backgroundColor: 'transparent',
+    flexDirection: "row",
+    borderRadius: 40,
+    marginHorizontal: 40,
+    elevation: 10,
+    marginVertical: 15,
+    alignItems: "center",
+    height: 50,
   },
   input: {
-    width: '80%',
-    marginBottom: 20,
+    color: darkTheme.onSurface,
+    backgroundColor: 'transparent',
+    flex: 1,
+  },  
+  logo: {
+    width: width * 0.9, 
+    height: height * 0.5, 
   },
-  button: {
+  logoContainer: {
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  passwordInputContainer: {
+    color: darkTheme.onSurface,
+    backgroundColor: 'transparent',
+    flexDirection: "row",
+    borderRadius: 40,
+    marginHorizontal: 40,
+    elevation: 10,
+    marginVertical: 15,
+    alignItems: "center",
+    height: 50,
+  },
+  signupButton: {
     marginTop: 16,
   },
-  link: {
+  signupButtonContainer: {},
+  back: {
+    marginTop: 16,
+  },
+  signupWithSpotifyButton: {
     marginTop: 16,
   },
 });
