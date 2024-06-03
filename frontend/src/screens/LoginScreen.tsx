@@ -18,7 +18,6 @@ const LoginScreen: React.FC<Props> = ({ navigation }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState<string>(''); // Use string for error message, initialized to an empty string
-  const { colors } = useTheme();
   const theme = useTheme();
 
   const handleLogin = async () => {
