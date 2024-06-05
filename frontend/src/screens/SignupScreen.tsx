@@ -1,10 +1,8 @@
 import React, { useState } from 'react';
 import { View, StyleSheet, ImageBackground, Dimensions, Image } from 'react-native';
-import { Button, TextInput, Text, HelperText, Dialog } from 'react-native-paper';
+import { Button, TextInput, HelperText } from 'react-native-paper';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import {darkTheme, lightTheme} from "../styles/theme"
-import { Button, TextInput, Text, HelperText 
-import axios from 'axios';
+import { darkTheme } from "../styles/theme";
 import { AuthStackNavigationProp } from '../types/types';
 
 type Props = {
@@ -20,7 +18,6 @@ const SignupScreen: React.FC<Props> = ({ navigation }) => {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [emailError, setEmailError] = useState<string>('');
   const [passwordError, setPasswordError] = useState<string>('');
-  const [generalError, setGeneralError] = useState<string>('');
 
   const validateEmail = () => {
     if (email !== confirmEmail) {
@@ -41,16 +38,15 @@ const SignupScreen: React.FC<Props> = ({ navigation }) => {
       return true;
     }
   };
-    if (!emailError && !passwordError) {
-      // Handle signup logic here
-      navigation.navigate('SetUsername');
-    } 
+
+  const handleSignUp = () => {
+    // Do nothing
   };
 
   return (
     <ImageBackground
-    source={require('../../assets/texturedbackground.png')} 
-    style={styles.background}>
+      source={require('../../assets/texturedbackground.png')} 
+      style={styles.background}>
 
       <View style={styles.logoContainer}>
         <Image
@@ -137,7 +133,7 @@ const SignupScreen: React.FC<Props> = ({ navigation }) => {
       </View>
 
       <View style={styles.signupButtonContainer}>
-        <Button mode="contained" onPress={handleSignup} style={styles.signupButton}>
+        <Button mode="contained" onPress={handleSignUp} style={styles.signupButton}>
           Sign Up
         </Button>
       </View>
