@@ -7,6 +7,7 @@
 Bridge is a platform designed to connect users through shared musical interests. Users can register, log in, create posts about their favorite songs or albums, and interact with other users' posts. Future milestones include integrating Spotify authentication and additional user interaction features.
 
 Demo: https://www.youtube.com/watch?v=xKSSHfgQOsE
+
 ![Bridge Poster Version 1](https://github.com/kaungzinye/bridge-public/assets/154214243/29f8e13c-9ced-44b5-9a21-7665a4bd47e3)
 
 
